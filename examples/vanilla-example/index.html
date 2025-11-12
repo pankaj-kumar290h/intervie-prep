@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla JS - Todo App (CRP Demo)</title>
+  
+  <!-- Critical CSS inlined for fast first paint -->
+  <style>
+    /* Critical above-the-fold styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    .performance-info {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: #555;
+    }
+    
+    .add-todo {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus {
+      border-color: #667eea;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+    }
+    
+    button:hover {
+      background: #5568d3;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    .todo-list {
+      list-style: none;
+    }
+    
+    .todo-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: all 0.3s;
+    }
+    
+    .todo-item:hover {
+      background: #f0f0f0;
+      transform: translateX(5px);
+    }
+    
+    .todo-item.completed {
+      opacity: 0.6;
+    }
+    
+    .todo-item.completed .todo-text {
+      text-decoration: line-through;
+      color: #999;
+    }
+    
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+    }
+    
+    .todo-text {
+      flex: 1;
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .delete-btn {
+      padding: 6px 12px;
+      background: #ff4757;
+      font-size: 12px;
+    }
+    
+    .delete-btn:hover {
+      background: #e84351;
+    }
+    
+    .stats {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+    
+    /* Loading indicator */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+    }
+  </style>
+  
+  <!-- Preload font (optional, for demo purposes) -->
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Vanilla JS Todo App</h1>
+    <p class="subtitle">Demonstrating Critical Rendering Path</p>
+    
+    <!-- Performance information -->
+    <div class="performance-info">
+      <strong>⚡ CRP Info:</strong><br>
+      • HTML loaded and parsed immediately<br>
+      • Critical CSS inlined (no blocking)<br>
+      • JavaScript deferred (non-blocking)<br>
+      • First Paint: <span id="first-paint">calculating...</span>ms
+    </div>
+    
+    <!-- Add todo form -->
+    <div class="add-todo">
+      <input 
+        type="text" 
+        id="todo-input" 
+        placeholder="What needs to be done?"
+        autocomplete="off"
+      >
+      <button id="add-btn">Add</button>
+    </div>
+    
+    <!-- Todo list -->
+    <ul class="todo-list" id="todo-list">
+      <li class="empty-state">No todos yet. Add one above!</li>
+    </ul>
+    
+    <!-- Statistics -->
+    <div class="stats">
+      <span>Total: <strong id="total-count">0</strong></span>
+      <span>Active: <strong id="active-count">0</strong></span>
+      <span>Completed: <strong id="completed-count">0</strong></span>
+    </div>
+  </div>
+  
+  <!-- JavaScript deferred for non-blocking load -->
+  <script src="app.js" defer></script>
+  
+  <!-- Performance measurement script -->
+  <script>
+    // Measure First Contentful Paint
+    const paintObserver = new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (entry.name === 'first-contentful-paint') {
+          const fcpElement = document.getElementById('first-paint');
+          if (fcpElement) {
+            fcpElement.textContent = Math.round(entry.startTime);
+          }
+        }
+      }
+    });
+    
+    paintObserver.observe({ entryTypes: ['paint'] });
+    
+    // Log CRP metrics to console
+    window.addEventListener('load', () => {
+      const perfData = performance.getEntriesByType('navigation')[0];
+      console.log('🚀 Vanilla JS Performance Metrics:');
+      console.log('-----------------------------------');
+      console.log('DOM Content Loaded:', Math.round(perfData.domContentLoadedEventEnd), 'ms');
+      console.log('Page Fully Loaded:', Math.round(perfData.loadEventEnd), 'ms');
+      console.log('HTML Size:', Math.round(perfData.transferSize / 1024), 'KB');
+    });
+  </script>
+</body>
+</html>
+

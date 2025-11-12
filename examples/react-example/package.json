@@ -1,0 +1,31 @@
+{
+  "name": "react-crp-example",
+  "version": "1.0.0",
+  "description": "React example demonstrating Critical Rendering Path",
+  "main": "index.html",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "react",
+    "critical-rendering-path",
+    "performance",
+    "crp"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "notes": {
+    "usage": "This example uses CDN for simplicity. For production, use: npm install && npm run build"
+  }
+}
+
