@@ -6,10 +6,12 @@ A comprehensive guide to understanding and optimizing the Critical Rendering Pat
 
 This repository contains:
 
-1. **Detailed Documentation** - 5 in-depth guides covering every aspect of CRP
+1. **Detailed Documentation** - In-depth guides covering every aspect of CRP
 2. **Practical Examples** - Working todo apps in vanilla JS and React
 3. **Performance Comparisons** - Real metrics and benchmarks
 4. **Optimization Strategies** - Actionable techniques to improve your sites
+5. **JavaScript Interview Questions** ⭐ **NEW** - Advanced frontend and backend questions for senior developers
+6. **System Design Questions** ⭐ **NEW** - Comprehensive system design interview prep for frontend and backend
 
 ---
 
@@ -222,6 +224,19 @@ Working applications demonstrating:
 - Performance comparison tools
 - Interactive demos
 
+### `javaScript/` Folder ⭐ **NEW**
+
+Advanced interview questions for senior developers:
+- **Frontend Advanced Questions** - Virtual DOM, Event Loop, Memory Management, Service Workers, Promises, Browser Rendering, State Management, Performance, Security
+- **Backend Advanced Questions** - Event Loop, Streams & Buffers, Cluster & Workers, Memory Management, Connection Pooling, Microservices, Authentication, Rate Limiting, Error Handling
+
+### `system-design/` Folder ⭐ **NEW**
+
+Comprehensive system design interviews:
+- **Frontend System Design** - Chat apps, News feeds, Video streaming, Image galleries, Collaborative editors, E-commerce, Autocomplete, Notifications, Dashboards, Component libraries
+- **Backend System Design** - URL shortener, Rate limiter, Distributed cache, Message queues, API Gateway, Auth systems, Order systems, Leaderboards, Search engines, Payment systems
+- **Complete with**: Architecture diagrams, Capacity estimation, API design, Database schemas, Code examples, Trade-off analysis
+
 ---
 
 ## 🔍 What You'll Learn
@@ -297,6 +312,27 @@ Working applications demonstrating:
 6. Use Web Workers for heavy computations
 7. Implement lazy loading with Intersection Observer
 8. Create performance budgets
+
+### Senior Developer Interview Prep ⭐ **NEW**
+
+1. **JavaScript Mastery**:
+   - Review [Frontend Advanced Questions](./javaScript/frontend-advanced-questions.md)
+   - Practice [Backend Advanced Questions](./javaScript/backend-advanced-questions.md)
+   - Implement all code examples from scratch
+
+2. **System Design**:
+   - Study [Frontend System Design](./system-design/frontend-system-design.md)
+   - Study [Backend System Design](./system-design/backend-system-design.md)
+   - Practice drawing architecture diagrams
+   - Do capacity estimation exercises
+   - Understand trade-offs for each design decision
+
+3. **Interview Practice**:
+   - Mock interviews with peers
+   - Time yourself (45 minutes per design question)
+   - Practice explaining your thought process
+   - Study real-world architectures (Netflix, Uber, Instagram)
+   - Review common patterns and anti-patterns
 
 ---
 
@@ -473,11 +509,19 @@ CLS (Cumulative Layout Shift)
 - "High Performance Browser Networking" by Ilya Grigorik
 - "Designing for Performance" by Lara Hogan
 - "Web Performance in Action" by Jeremy Wagner
+- "Designing Data-Intensive Applications" by Martin Kleppmann ⭐ **System Design**
+- "System Design Interview" by Alex Xu ⭐ **System Design**
 
 ### Articles
 - [Optimizing Content Efficiency](https://web.dev/performance-optimizing-content-efficiency/)
 - [Rendering Performance](https://web.dev/rendering-performance/)
 - [JavaScript Performance](https://web.dev/fast/)
+
+### System Design Resources ⭐ **NEW**
+- [System Design Primer](https://github.com/donnemartin/system-design-primer)
+- [High Scalability Blog](http://highscalability.com/)
+- [Grokking the System Design Interview](https://www.educative.io/courses/grokking-the-system-design-interview)
+- Company Engineering Blogs: [Netflix](https://netflixtechblog.com/), [Uber](https://eng.uber.com/), [Airbnb](https://medium.com/airbnb-engineering)
 
 ---
 
