@@ -1621,6 +1621,996 @@ app.post('/refresh', authMiddleware, (req, res) => {
 
 ---
 
+## Error Handling & Logging
+
+### Question 9: Implement Centralized Error Handling
+
+```javascript
+/**
+ * Custom Error Classes
+ */
+class AppError extends Error {
+  constructor(message, statusCode, code, isOperational = true) {
+    super(message);
+    this.statusCode = statusCode;
+    this.code = code;
+    this.isOperational = isOperational;
+    this.timestamp = new Date().toISOString();
+    
+    Error.captureStackTrace(this, this.constructor);
+  }
+  
+  toJSON() {
+    return {
+      error: {
+        message: this.message,
+        code: this.code,
+        statusCode: this.statusCode,
+        timestamp: this.timestamp
+      }
+    };
+  }
+}
+
+class ValidationError extends AppError {
+  constructor(errors) {
+    super('Validation failed', 400, 'VALIDATION_ERROR');
+    this.errors = errors;
+  }
+  
+  toJSON() {
+    return {
+      error: {
+        message: this.message,
+        code: this.code,
+        statusCode: this.statusCode,
+        timestamp: this.timestamp,
+        details: this.errors
+      }
+    };
+  }
+}
+
+class NotFoundError extends AppError {
+  constructor(resource = 'Resource') {
+    super(`${resource} not found`, 404, 'NOT_FOUND');
+  }
+}
+
+class UnauthorizedError extends AppError {
+  constructor(message = 'Unauthorized') {
+    super(message, 401, 'UNAUTHORIZED');
+  }
+}
+
+class ForbiddenError extends AppError {
+  constructor(message = 'Forbidden') {
+    super(message, 403, 'FORBIDDEN');
+  }
+}
+
+class ConflictError extends AppError {
+  constructor(message = 'Resource conflict') {
+    super(message, 409, 'CONFLICT');
+  }
+}
+
+class RateLimitError extends AppError {
+  constructor(retryAfter) {
+    super('Too many requests', 429, 'RATE_LIMIT_EXCEEDED');
+    this.retryAfter = retryAfter;
+  }
+}
+
+class DatabaseError extends AppError {
+  constructor(message, originalError) {
+    super(message, 500, 'DATABASE_ERROR', false);
+    this.originalError = originalError;
+  }
+}
+
+/**
+ * Error Handler Middleware
+ */
+class ErrorHandler {
+  constructor(logger) {
+    this.logger = logger;
+  }
+  
+  handle() {
+    return (err, req, res, next) => {
+      // Default to 500 if no status code
+      err.statusCode = err.statusCode || 500;
+      
+      // Log the error
+      this.logError(err, req);
+      
+      // Determine response based on environment
+      if (process.env.NODE_ENV === 'production') {
+        this.sendProductionError(err, res);
+      } else {
+        this.sendDevelopmentError(err, res);
+      }
+      
+      // Report critical errors
+      if (!err.isOperational) {
+        this.reportCriticalError(err, req);
+      }
+    };
+  }
+  
+  logError(err, req) {
+    const errorLog = {
+      message: err.message,
+      code: err.code,
+      statusCode: err.statusCode,
+      stack: err.stack,
+      path: req.path,
+      method: req.method,
+      ip: req.ip,
+      userId: req.user?.id,
+      requestId: req.id,
+      timestamp: new Date().toISOString()
+    };
+    
+    if (err.isOperational) {
+      this.logger.warn('Operational error', errorLog);
+    } else {
+      this.logger.error('Critical error', errorLog);
+    }
+  }
+  
+  sendProductionError(err, res) {
+    // Operational, trusted error: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json(err.toJSON ? err.toJSON() : {
+        error: {
+          message: err.message,
+          code: err.code
+        }
+      });
+    }
+    
+    // Programming or unknown error: don't leak details
+    return res.status(500).json({
+      error: {
+        message: 'Something went wrong',
+        code: 'INTERNAL_ERROR'
+      }
+    });
+  }
+  
+  sendDevelopmentError(err, res) {
+    return res.status(err.statusCode).json({
+      error: {
+        message: err.message,
+        code: err.code,
+        stack: err.stack,
+        details: err.errors
+      }
+    });
+  }
+  
+  reportCriticalError(err, req) {
+    // Send to error tracking service (Sentry, etc.)
+    if (global.Sentry) {
+      Sentry.withScope(scope => {
+        scope.setExtra('requestId', req.id);
+        scope.setUser({ id: req.user?.id });
+        Sentry.captureException(err);
+      });
+    }
+  }
+}
+
+/**
+ * Async Handler Wrapper
+ */
+const asyncHandler = (fn) => {
+  return (req, res, next) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+};
+
+/**
+ * Structured Logger
+ */
+class Logger {
+  constructor(options = {}) {
+    this.service = options.service || 'app';
+    this.level = options.level || 'info';
+    this.transports = [];
+    
+    this.levels = {
+      error: 0,
+      warn: 1,
+      info: 2,
+      debug: 3
+    };
+  }
+  
+  addTransport(transport) {
+    this.transports.push(transport);
+  }
+  
+  log(level, message, meta = {}) {
+    if (this.levels[level] > this.levels[this.level]) return;
+    
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      level,
+      service: this.service,
+      message,
+      ...meta,
+      // Add request context if available
+      requestId: meta.requestId || global.requestContext?.requestId,
+      traceId: meta.traceId || global.requestContext?.traceId
+    };
+    
+    this.transports.forEach(transport => {
+      transport.write(logEntry);
+    });
+  }
+  
+  error(message, meta) { this.log('error', message, meta); }
+  warn(message, meta) { this.log('warn', message, meta); }
+  info(message, meta) { this.log('info', message, meta); }
+  debug(message, meta) { this.log('debug', message, meta); }
+}
+
+/**
+ * Console Transport
+ */
+class ConsoleTransport {
+  write(logEntry) {
+    const formatted = JSON.stringify(logEntry);
+    
+    switch (logEntry.level) {
+      case 'error':
+        console.error(formatted);
+        break;
+      case 'warn':
+        console.warn(formatted);
+        break;
+      default:
+        console.log(formatted);
+    }
+  }
+}
+
+/**
+ * File Transport
+ */
+class FileTransport {
+  constructor(filename) {
+    this.filename = filename;
+    this.fs = require('fs');
+    this.stream = this.fs.createWriteStream(filename, { flags: 'a' });
+  }
+  
+  write(logEntry) {
+    this.stream.write(JSON.stringify(logEntry) + '\n');
+  }
+}
+
+/**
+ * Request Logger Middleware
+ */
+function requestLogger(logger) {
+  return (req, res, next) => {
+    const start = Date.now();
+    
+    // Generate request ID
+    req.id = req.headers['x-request-id'] || crypto.randomUUID();
+    
+    // Log request
+    logger.info('Request received', {
+      requestId: req.id,
+      method: req.method,
+      path: req.path,
+      query: req.query,
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
+    
+    // Log response
+    res.on('finish', () => {
+      const duration = Date.now() - start;
+      
+      logger.info('Response sent', {
+        requestId: req.id,
+        method: req.method,
+        path: req.path,
+        statusCode: res.statusCode,
+        duration: `${duration}ms`
+      });
+    });
+    
+    next();
+  };
+}
+
+/**
+ * Graceful Shutdown Handler
+ */
+class GracefulShutdown {
+  constructor(server, options = {}) {
+    this.server = server;
+    this.timeout = options.timeout || 30000;
+    this.logger = options.logger || console;
+    this.connections = new Set();
+    this.isShuttingDown = false;
+    
+    this.trackConnections();
+    this.setupSignalHandlers();
+  }
+  
+  trackConnections() {
+    this.server.on('connection', (connection) => {
+      this.connections.add(connection);
+      
+      connection.on('close', () => {
+        this.connections.delete(connection);
+      });
+    });
+  }
+  
+  setupSignalHandlers() {
+    const signals = ['SIGTERM', 'SIGINT'];
+    
+    signals.forEach(signal => {
+      process.on(signal, () => {
+        this.logger.info(`Received ${signal}, starting graceful shutdown`);
+        this.shutdown();
+      });
+    });
+  }
+  
+  async shutdown() {
+    if (this.isShuttingDown) return;
+    this.isShuttingDown = true;
+    
+    // Stop accepting new connections
+    this.server.close(async () => {
+      this.logger.info('Server closed, cleaning up resources');
+      
+      try {
+        // Close database connections
+        await this.closeDatabase();
+        
+        // Close cache connections
+        await this.closeCache();
+        
+        // Close message queue connections
+        await this.closeMessageQueue();
+        
+        this.logger.info('Graceful shutdown complete');
+        process.exit(0);
+      } catch (error) {
+        this.logger.error('Error during shutdown', { error });
+        process.exit(1);
+      }
+    });
+    
+    // Force close connections after timeout
+    setTimeout(() => {
+      this.logger.warn('Forcing shutdown after timeout');
+      
+      this.connections.forEach(connection => {
+        connection.destroy();
+      });
+      
+      process.exit(1);
+    }, this.timeout);
+  }
+  
+  async closeDatabase() {
+    // Close database pool
+    if (global.dbPool) {
+      await global.dbPool.end();
+    }
+  }
+  
+  async closeCache() {
+    // Close Redis connection
+    if (global.redis) {
+      await global.redis.quit();
+    }
+  }
+  
+  async closeMessageQueue() {
+    // Close Kafka/RabbitMQ connections
+    if (global.kafka) {
+      await global.kafka.disconnect();
+    }
+  }
+}
+
+// Usage Example
+const express = require('express');
+const app = express();
+
+const logger = new Logger({ service: 'api', level: 'debug' });
+logger.addTransport(new ConsoleTransport());
+logger.addTransport(new FileTransport('logs/app.log'));
+
+const errorHandler = new ErrorHandler(logger);
+
+// Middleware
+app.use(requestLogger(logger));
+
+// Routes
+app.get('/users/:id', asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  
+  if (!user) {
+    throw new NotFoundError('User');
+  }
+  
+  res.json(user);
+}));
+
+app.post('/users', asyncHandler(async (req, res) => {
+  const errors = validateUser(req.body);
+  
+  if (errors.length > 0) {
+    throw new ValidationError(errors);
+  }
+  
+  const user = await User.create(req.body);
+  res.status(201).json(user);
+}));
+
+// Error handling middleware (must be last)
+app.use(errorHandler.handle());
+
+// Start server with graceful shutdown
+const server = app.listen(3000);
+new GracefulShutdown(server, { logger, timeout: 30000 });
+```
+
+---
+
+## Testing & Mocking
+
+### Question 10: Implement Testing Patterns
+
+```javascript
+/**
+ * Testing Utilities and Patterns
+ */
+
+const { jest } = require('@jest/globals');
+
+/**
+ * 1. Unit Testing - Pure Functions
+ */
+describe('Pure Function Tests', () => {
+  describe('calculateDiscount', () => {
+    const calculateDiscount = (price, discountPercent) => {
+      if (price < 0 || discountPercent < 0) {
+        throw new Error('Values must be non-negative');
+      }
+      if (discountPercent > 100) {
+        throw new Error('Discount cannot exceed 100%');
+      }
+      return price * (1 - discountPercent / 100);
+    };
+    
+    test('should calculate 10% discount correctly', () => {
+      expect(calculateDiscount(100, 10)).toBe(90);
+    });
+    
+    test('should handle 0% discount', () => {
+      expect(calculateDiscount(100, 0)).toBe(100);
+    });
+    
+    test('should handle 100% discount', () => {
+      expect(calculateDiscount(100, 100)).toBe(0);
+    });
+    
+    test('should throw for negative price', () => {
+      expect(() => calculateDiscount(-10, 10)).toThrow('Values must be non-negative');
+    });
+    
+    test('should throw for discount over 100%', () => {
+      expect(() => calculateDiscount(100, 150)).toThrow('Discount cannot exceed 100%');
+    });
+  });
+});
+
+/**
+ * 2. Mocking External Dependencies
+ */
+class UserService {
+  constructor(userRepository, emailService, cacheService) {
+    this.userRepository = userRepository;
+    this.emailService = emailService;
+    this.cacheService = cacheService;
+  }
+  
+  async createUser(userData) {
+    const user = await this.userRepository.create(userData);
+    await this.emailService.sendWelcomeEmail(user.email);
+    await this.cacheService.invalidate(`users:${user.id}`);
+    return user;
+  }
+  
+  async getUserById(id) {
+    // Check cache first
+    const cached = await this.cacheService.get(`users:${id}`);
+    if (cached) return JSON.parse(cached);
+    
+    const user = await this.userRepository.findById(id);
+    if (user) {
+      await this.cacheService.set(`users:${id}`, JSON.stringify(user), 3600);
+    }
+    return user;
+  }
+}
+
+describe('UserService', () => {
+  let userService;
+  let mockUserRepository;
+  let mockEmailService;
+  let mockCacheService;
+  
+  beforeEach(() => {
+    // Create mocks
+    mockUserRepository = {
+      create: jest.fn(),
+      findById: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn()
+    };
+    
+    mockEmailService = {
+      sendWelcomeEmail: jest.fn(),
+      sendPasswordReset: jest.fn()
+    };
+    
+    mockCacheService = {
+      get: jest.fn(),
+      set: jest.fn(),
+      invalidate: jest.fn()
+    };
+    
+    userService = new UserService(
+      mockUserRepository,
+      mockEmailService,
+      mockCacheService
+    );
+  });
+  
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  
+  describe('createUser', () => {
+    test('should create user and send welcome email', async () => {
+      const userData = { email: 'test@example.com', name: 'Test' };
+      const createdUser = { id: '123', ...userData };
+      
+      mockUserRepository.create.mockResolvedValue(createdUser);
+      mockEmailService.sendWelcomeEmail.mockResolvedValue(true);
+      mockCacheService.invalidate.mockResolvedValue(true);
+      
+      const result = await userService.createUser(userData);
+      
+      expect(result).toEqual(createdUser);
+      expect(mockUserRepository.create).toHaveBeenCalledWith(userData);
+      expect(mockEmailService.sendWelcomeEmail).toHaveBeenCalledWith(userData.email);
+      expect(mockCacheService.invalidate).toHaveBeenCalledWith('users:123');
+    });
+    
+    test('should throw if repository fails', async () => {
+      mockUserRepository.create.mockRejectedValue(new Error('DB Error'));
+      
+      await expect(userService.createUser({}))
+        .rejects.toThrow('DB Error');
+      
+      expect(mockEmailService.sendWelcomeEmail).not.toHaveBeenCalled();
+    });
+  });
+  
+  describe('getUserById', () => {
+    test('should return cached user if available', async () => {
+      const cachedUser = { id: '123', name: 'Cached User' };
+      mockCacheService.get.mockResolvedValue(JSON.stringify(cachedUser));
+      
+      const result = await userService.getUserById('123');
+      
+      expect(result).toEqual(cachedUser);
+      expect(mockCacheService.get).toHaveBeenCalledWith('users:123');
+      expect(mockUserRepository.findById).not.toHaveBeenCalled();
+    });
+    
+    test('should fetch from DB and cache if not in cache', async () => {
+      const dbUser = { id: '123', name: 'DB User' };
+      mockCacheService.get.mockResolvedValue(null);
+      mockUserRepository.findById.mockResolvedValue(dbUser);
+      
+      const result = await userService.getUserById('123');
+      
+      expect(result).toEqual(dbUser);
+      expect(mockUserRepository.findById).toHaveBeenCalledWith('123');
+      expect(mockCacheService.set).toHaveBeenCalledWith(
+        'users:123',
+        JSON.stringify(dbUser),
+        3600
+      );
+    });
+  });
+});
+
+/**
+ * 3. Integration Testing with Database
+ */
+class TestDatabase {
+  constructor() {
+    this.pool = null;
+  }
+  
+  async connect() {
+    const { Pool } = require('pg');
+    this.pool = new Pool({
+      connectionString: process.env.TEST_DATABASE_URL
+    });
+  }
+  
+  async disconnect() {
+    if (this.pool) {
+      await this.pool.end();
+    }
+  }
+  
+  async reset() {
+    await this.pool.query('TRUNCATE users, orders, products RESTART IDENTITY CASCADE');
+  }
+  
+  async seed(data) {
+    for (const [table, rows] of Object.entries(data)) {
+      for (const row of rows) {
+        const columns = Object.keys(row).join(', ');
+        const values = Object.values(row);
+        const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+        
+        await this.pool.query(
+          `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
+          values
+        );
+      }
+    }
+  }
+}
+
+describe('Integration Tests', () => {
+  let db;
+  let app;
+  
+  beforeAll(async () => {
+    db = new TestDatabase();
+    await db.connect();
+    app = require('./app'); // Your Express app
+  });
+  
+  afterAll(async () => {
+    await db.disconnect();
+  });
+  
+  beforeEach(async () => {
+    await db.reset();
+  });
+  
+  describe('POST /api/users', () => {
+    test('should create a new user', async () => {
+      const request = require('supertest');
+      
+      const response = await request(app)
+        .post('/api/users')
+        .send({
+          email: 'test@example.com',
+          name: 'Test User',
+          password: 'password123'
+        });
+      
+      expect(response.status).toBe(201);
+      expect(response.body.user).toMatchObject({
+        email: 'test@example.com',
+        name: 'Test User'
+      });
+      expect(response.body.user.password).toBeUndefined();
+    });
+    
+    test('should return 400 for invalid email', async () => {
+      const request = require('supertest');
+      
+      const response = await request(app)
+        .post('/api/users')
+        .send({
+          email: 'invalid-email',
+          name: 'Test',
+          password: 'password123'
+        });
+      
+      expect(response.status).toBe(400);
+      expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    });
+  });
+  
+  describe('GET /api/users/:id', () => {
+    beforeEach(async () => {
+      await db.seed({
+        users: [
+          { id: 1, email: 'user1@test.com', name: 'User 1' },
+          { id: 2, email: 'user2@test.com', name: 'User 2' }
+        ]
+      });
+    });
+    
+    test('should return user by id', async () => {
+      const request = require('supertest');
+      
+      const response = await request(app).get('/api/users/1');
+      
+      expect(response.status).toBe(200);
+      expect(response.body.email).toBe('user1@test.com');
+    });
+    
+    test('should return 404 for non-existent user', async () => {
+      const request = require('supertest');
+      
+      const response = await request(app).get('/api/users/999');
+      
+      expect(response.status).toBe(404);
+    });
+  });
+});
+
+/**
+ * 4. Mock HTTP Requests
+ */
+const nock = require('nock');
+
+describe('External API Integration', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+  
+  test('should fetch user from external API', async () => {
+    const externalUser = { id: 1, name: 'External User' };
+    
+    nock('https://api.external.com')
+      .get('/users/1')
+      .reply(200, externalUser);
+    
+    const axios = require('axios');
+    const response = await axios.get('https://api.external.com/users/1');
+    
+    expect(response.data).toEqual(externalUser);
+  });
+  
+  test('should handle external API errors', async () => {
+    nock('https://api.external.com')
+      .get('/users/1')
+      .reply(500, { error: 'Internal Server Error' });
+    
+    const axios = require('axios');
+    
+    await expect(axios.get('https://api.external.com/users/1'))
+      .rejects.toThrow();
+  });
+  
+  test('should handle network timeouts', async () => {
+    nock('https://api.external.com')
+      .get('/users/1')
+      .delay(5000)
+      .reply(200);
+    
+    const axios = require('axios');
+    
+    await expect(
+      axios.get('https://api.external.com/users/1', { timeout: 1000 })
+    ).rejects.toThrow();
+  });
+});
+
+/**
+ * 5. Testing Async Operations
+ */
+describe('Async Testing Patterns', () => {
+  // Test with async/await
+  test('async/await pattern', async () => {
+    const fetchData = async () => {
+      return new Promise(resolve => {
+        setTimeout(() => resolve('data'), 100);
+      });
+    };
+    
+    const result = await fetchData();
+    expect(result).toBe('data');
+  });
+  
+  // Test with done callback
+  test('callback pattern', (done) => {
+    const fetchDataCallback = (callback) => {
+      setTimeout(() => callback(null, 'data'), 100);
+    };
+    
+    fetchDataCallback((err, result) => {
+      expect(err).toBeNull();
+      expect(result).toBe('data');
+      done();
+    });
+  });
+  
+  // Test promises
+  test('promise pattern', () => {
+    const fetchDataPromise = () => Promise.resolve('data');
+    
+    return fetchDataPromise().then(result => {
+      expect(result).toBe('data');
+    });
+  });
+  
+  // Test error handling
+  test('should handle async errors', async () => {
+    const failingOperation = async () => {
+      throw new Error('Async error');
+    };
+    
+    await expect(failingOperation()).rejects.toThrow('Async error');
+  });
+});
+
+/**
+ * 6. Snapshot Testing
+ */
+describe('Snapshot Testing', () => {
+  test('API response structure', async () => {
+    const formatUserResponse = (user) => ({
+      id: user.id,
+      email: user.email,
+      profile: {
+        name: user.name,
+        createdAt: user.createdAt
+      },
+      links: {
+        self: `/api/users/${user.id}`,
+        orders: `/api/users/${user.id}/orders`
+      }
+    });
+    
+    const user = {
+      id: '123',
+      email: 'test@example.com',
+      name: 'Test User',
+      createdAt: '2024-01-01T00:00:00Z'
+    };
+    
+    expect(formatUserResponse(user)).toMatchSnapshot();
+  });
+});
+
+/**
+ * 7. Test Fixtures and Factories
+ */
+class TestFactory {
+  static user(overrides = {}) {
+    return {
+      id: crypto.randomUUID(),
+      email: `test-${Date.now()}@example.com`,
+      name: 'Test User',
+      password: 'hashed_password',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      ...overrides
+    };
+  }
+  
+  static order(userId, overrides = {}) {
+    return {
+      id: crypto.randomUUID(),
+      userId,
+      status: 'pending',
+      total: 100.00,
+      items: [],
+      createdAt: new Date().toISOString(),
+      ...overrides
+    };
+  }
+  
+  static product(overrides = {}) {
+    return {
+      id: crypto.randomUUID(),
+      name: 'Test Product',
+      price: 29.99,
+      inventory: 100,
+      ...overrides
+    };
+  }
+}
+
+describe('Using Test Factories', () => {
+  test('create order for user', async () => {
+    const user = TestFactory.user({ name: 'John Doe' });
+    const order = TestFactory.order(user.id, { total: 150.00 });
+    
+    expect(order.userId).toBe(user.id);
+    expect(order.total).toBe(150.00);
+  });
+});
+
+/**
+ * 8. Performance Testing
+ */
+describe('Performance Tests', () => {
+  test('should complete within time limit', async () => {
+    const start = performance.now();
+    
+    // Operation to test
+    const results = [];
+    for (let i = 0; i < 1000; i++) {
+      results.push(i * 2);
+    }
+    
+    const duration = performance.now() - start;
+    
+    expect(duration).toBeLessThan(100); // Should complete in < 100ms
+  });
+  
+  test('should handle large data efficiently', () => {
+    const largeArray = Array.from({ length: 100000 }, (_, i) => i);
+    
+    const start = performance.now();
+    const filtered = largeArray.filter(x => x % 2 === 0);
+    const duration = performance.now() - start;
+    
+    expect(filtered.length).toBe(50000);
+    expect(duration).toBeLessThan(50);
+  });
+});
+
+/**
+ * 9. Test Coverage Configuration
+ */
+// jest.config.js
+module.exports = {
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  },
+  collectCoverageFrom: [
+    'src/**/*.js',
+    '!src/**/*.test.js',
+    '!src/config/**',
+    '!src/migrations/**'
+  ],
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['./jest.setup.js'],
+  testTimeout: 10000
+};
+
+// jest.setup.js
+beforeAll(async () => {
+  // Global setup
+  process.env.NODE_ENV = 'test';
+});
+
+afterAll(async () => {
+  // Global teardown
+});
+```
+
+---
+
 ## Summary
 
 These questions cover:
@@ -1632,7 +2622,9 @@ These questions cover:
 5. ✅ **Database Optimization**
 6. ✅ **Microservices Patterns**
 7. ✅ **Security & Authentication**
-8. ✅ **Performance Tuning**
+8. ✅ **Rate Limiting & Throttling**
+9. ✅ **Error Handling & Logging**
+10. ✅ **Testing & Mocking**
 
 **Tips for Backend Interviews**:
 - Discuss scalability considerations
@@ -1640,6 +2632,8 @@ These questions cover:
 - Explain caching layers (Redis, etc.)
 - Show awareness of monitoring/logging
 - Understand distributed systems concepts
+- Demonstrate testing best practices
+- Explain graceful shutdown strategies
 
 मालिक, master these and you'll crush any backend Node.js interview! 🚀
 

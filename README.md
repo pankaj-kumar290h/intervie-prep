@@ -226,16 +226,27 @@ Working applications demonstrating:
 
 ### `javaScript/` Folder ⭐ **NEW**
 
-Advanced interview questions for senior developers:
-- **Frontend Advanced Questions** - Virtual DOM, Event Loop, Memory Management, Service Workers, Promises, Browser Rendering, State Management, Performance, Security
-- **Backend Advanced Questions** - Event Loop, Streams & Buffers, Cluster & Workers, Memory Management, Connection Pooling, Microservices, Authentication, Rate Limiting, Error Handling
+Comprehensive interview questions for senior developers:
+- **[Frontend Advanced Questions](./javaScript/frontend-advanced-questions.md)** - Virtual DOM, Event Loop, Memory Management, Service Workers, Promises, Browser Rendering, State Management, Performance, Security
+- **[Backend Advanced Questions](./javaScript/backend-advanced-questions.md)** - Event Loop, Streams & Buffers, Cluster & Workers, Memory Management, Connection Pooling, Microservices, Authentication, Rate Limiting, Error Handling, Testing & Mocking
+- **[TypeScript Advanced Questions](./javaScript/typescript-advanced-questions.md)** ⭐ **NEW** - Type System, Generics, Conditional Types, Mapped Types, Template Literals, Type Guards, Utility Types, Declaration Files, Design Patterns
+- **[React Advanced Questions](./javaScript/react-advanced-questions.md)** ⭐ **NEW** - Component Patterns, Hooks Deep Dive, State Management, Performance, Concurrent React, Server Components, Testing, Custom Hooks, Error Handling
+- **[DSA Interview Questions](./javaScript/dsa-interview-questions.md)** ⭐ **NEW** - Arrays, Hash Tables, Linked Lists, Trees, Graphs, Dynamic Programming, Sorting, Sliding Window, Common Patterns
 
 ### `system-design/` Folder ⭐ **NEW**
 
 Comprehensive system design interviews:
-- **Frontend System Design** - Chat apps, News feeds, Video streaming, Image galleries, Collaborative editors, E-commerce, Autocomplete, Notifications, Dashboards, Component libraries
-- **Backend System Design** - URL shortener, Rate limiter, Distributed cache, Message queues, API Gateway, Auth systems, Order systems, Leaderboards, Search engines, Payment systems
+- **[Frontend System Design](./system-design/frontend-system-design.md)** - Chat apps, News feeds, Video streaming, Image galleries, Collaborative editors, E-commerce, Autocomplete, Notifications, Dashboards, Component libraries
+- **[Backend System Design](./system-design/backend-system-design.md)** - URL shortener, Rate limiter, Distributed cache, Message queues, API Gateway, Auth systems, Order systems, Leaderboards, Search engines, Payment systems
+- **[System Design Concepts](./system-design/system-design-concepts.md)** ⭐ **NEW** - Scalability, Load Balancing, Caching, Databases, Message Queues, Microservices, API Design, Security, Monitoring, CAP Theorem
+- **[Database Design Questions](./system-design/database-design-questions.md)** ⭐ **NEW** - Schema Design, E-Commerce, Social Media, Booking Systems, Indexing, Query Optimization, Data Modeling Patterns
 - **Complete with**: Architecture diagrams, Capacity estimation, API design, Database schemas, Code examples, Trade-off analysis
+
+### `interview-prep/` Folder ⭐ **NEW**
+
+Complete interview preparation resources:
+- **[Behavioral Questions](./interview-prep/behavioral-questions.md)** - STAR Method, Leadership, Technical Decisions, Conflict Resolution, Communication, Questions to Ask
+- **[Coding Patterns Cheatsheet](./interview-prep/coding-patterns-cheatsheet.md)** - Two Pointers, Sliding Window, Binary Search, BFS/DFS, Backtracking, DP, Heaps, Union Find, Tries
 
 ---
 
@@ -313,21 +324,36 @@ Comprehensive system design interviews:
 7. Implement lazy loading with Intersection Observer
 8. Create performance budgets
 
-### Senior Developer Interview Prep ⭐ **NEW**
+### Senior Developer Interview Prep ⭐ **COMPLETE GUIDE**
 
 1. **JavaScript Mastery**:
    - Review [Frontend Advanced Questions](./javaScript/frontend-advanced-questions.md)
    - Practice [Backend Advanced Questions](./javaScript/backend-advanced-questions.md)
+   - Master [TypeScript Advanced Questions](./javaScript/typescript-advanced-questions.md)
+   - Study [React Advanced Questions](./javaScript/react-advanced-questions.md)
    - Implement all code examples from scratch
 
-2. **System Design**:
-   - Study [Frontend System Design](./system-design/frontend-system-design.md)
-   - Study [Backend System Design](./system-design/backend-system-design.md)
-   - Practice drawing architecture diagrams
-   - Do capacity estimation exercises
-   - Understand trade-offs for each design decision
+2. **Data Structures & Algorithms**:
+   - Study [DSA Interview Questions](./javaScript/dsa-interview-questions.md)
+   - Use [Coding Patterns Cheatsheet](./interview-prep/coding-patterns-cheatsheet.md)
+   - Practice pattern recognition
+   - Solve 2-3 problems daily on LeetCode
 
-3. **Interview Practice**:
+3. **System Design**:
+   - Study [System Design Concepts](./system-design/system-design-concepts.md) first
+   - Review [Database Design Questions](./system-design/database-design-questions.md)
+   - Practice [Frontend System Design](./system-design/frontend-system-design.md)
+   - Practice [Backend System Design](./system-design/backend-system-design.md)
+   - Draw architecture diagrams
+   - Do capacity estimation exercises
+
+4. **Behavioral Interview**:
+   - Review [Behavioral Questions](./interview-prep/behavioral-questions.md)
+   - Prepare 7-10 STAR stories
+   - Practice out loud
+   - Prepare questions for interviewers
+
+5. **Interview Practice**:
    - Mock interviews with peers
    - Time yourself (45 minutes per design question)
    - Practice explaining your thought process
