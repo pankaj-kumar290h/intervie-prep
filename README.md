@@ -248,6 +248,23 @@ Complete interview preparation resources:
 - **[Behavioral Questions](./interview-prep/behavioral-questions.md)** - STAR Method, Leadership, Technical Decisions, Conflict Resolution, Communication, Questions to Ask
 - **[Coding Patterns Cheatsheet](./interview-prep/coding-patterns-cheatsheet.md)** - Two Pointers, Sliding Window, Binary Search, BFS/DFS, Backtracking, DP, Heaps, Union Find, Tries
 
+### `design-pattren/` Folder ⭐ **NEW**
+
+Comprehensive design patterns with practical examples:
+
+**JavaScript Patterns:**
+- **[Creational Patterns](./design-pattren/javascript/01-creational-patterns.md)** - Factory, Abstract Factory, Singleton, Builder, Prototype with real-world examples
+- **[Structural Patterns](./design-pattren/javascript/02-structural-patterns.md)** - Adapter, Decorator, Facade, Proxy, Composite with practical implementations
+- **[Behavioral Patterns](./design-pattren/javascript/03-behavioral-patterns.md)** - Observer, Strategy, Command, State, Chain of Responsibility
+- **[Functional Patterns](./design-pattren/javascript/04-functional-patterns.md)** - Composition, Currying, Memoization, Higher-Order Functions, Monads, Immutability
+
+**Node.js Patterns:**
+- **[Module Patterns](./design-pattren/nodejs/01-module-patterns.md)** - CommonJS, ES Modules, Revealing Module, Dependency Injection, Plugin Architecture
+- **[Async Patterns](./design-pattren/nodejs/02-async-patterns.md)** - Callbacks, Promises, Async/Await, Concurrency Control, Error Handling
+- **[Middleware Patterns](./design-pattren/nodejs/03-middleware-patterns.md)** - Express Middleware, Koa Onion Model, Pipeline, Chain of Responsibility
+- **[Streaming Patterns](./design-pattren/nodejs/04-streaming-patterns.md)** - Transform Streams, Pipeline, Backpressure, Object Mode
+- **[Microservices Patterns](./design-pattren/nodejs/05-microservices-patterns.md)** - Circuit Breaker, Saga, CQRS, Event Sourcing, Service Discovery
+
 ---
 
 ## 🔍 What You'll Learn
@@ -353,7 +370,14 @@ Complete interview preparation resources:
    - Practice out loud
    - Prepare questions for interviewers
 
-5. **Interview Practice**:
+5. **Design Patterns Mastery** ⭐ **NEW**:
+   - Study [JavaScript Creational Patterns](./design-pattren/javascript/01-creational-patterns.md)
+   - Learn [Structural Patterns](./design-pattren/javascript/02-structural-patterns.md)
+   - Master [Behavioral Patterns](./design-pattren/javascript/03-behavioral-patterns.md)
+   - Practice [Node.js Async Patterns](./design-pattren/nodejs/02-async-patterns.md)
+   - Implement [Microservices Patterns](./design-pattren/nodejs/05-microservices-patterns.md)
+
+6. **Interview Practice**:
    - Mock interviews with peers
    - Time yourself (45 minutes per design question)
    - Practice explaining your thought process
