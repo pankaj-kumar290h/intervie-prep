@@ -21,36 +21,36 @@ This repository contains:
 
 Start with these guides in order:
 
-1. [Critical Rendering Path Overview](./docs/01-critical-rendering-path-overview.md)
+1. [Critical Rendering Path Overview](./docs/crp/01-overview.md)
    - What is CRP and why it matters
    - The 6 steps: DOM, CSSOM, Render Tree, Layout, Paint, Composite
    - Key metrics and goals
 
-2. [Blocking vs Non-Blocking Resources](./docs/02-blocking-vs-non-blocking.md)
+2. [Blocking vs Non-Blocking Resources](./docs/crp/02-blocking-vs-non-blocking.md)
    - Understanding render-blocking resources
    - CSS and JavaScript blocking behavior
    - Making resources non-blocking
    - Visual timeline comparisons
 
-3. [CRP Steps - Deep Dive](./docs/03-crp-steps-deep-dive.md)
+3. [CRP Steps - Deep Dive](./docs/crp/03-steps-deep-dive.md)
    - Detailed breakdown of each CRP step
    - DOM and CSSOM construction
    - JavaScript execution models
    - Layout, Paint, and Composite phases
 
-4. [Vanilla vs React Comparison](./docs/04-vanilla-vs-react-comparison.md)
+4. [Vanilla vs React Comparison](./docs/crp/04-vanilla-vs-react.md)
    - How CRP differs between approaches
    - Initial load vs runtime performance
    - When each approach is faster
    - Real-world benchmarks
 
-5. [Optimization Strategies](./docs/05-optimization-strategies.md)
+5. [Optimization Strategies](./docs/crp/05-optimization.md)
    - Complete optimization checklist
    - HTML, CSS, and JavaScript optimizations
    - Resource loading strategies
    - Performance measurement tools
 
-6. [Using DevTools to Analyze CRP](./docs/06-devtools-crp-analysis.md)
+6. [Using DevTools to Analyze CRP](./docs/crp/06-devtools-analysis.md)
    - Network Tab: Resource analysis and blocking detection
    - Performance Tab: Timeline and rendering phases
    - Lighthouse: Automated audits and recommendations
@@ -58,7 +58,7 @@ Start with these guides in order:
    - Performance API: Programmatic measurement
    - Real-world debugging examples
 
-7. [Advanced Methods for Senior Developers](./docs/07-advanced-methods-for-senior-developers.md) ⭐ **NEW**
+7. [Advanced Methods for Senior Developers](./docs/crp/07-advanced-methods.md) ⭐ **NEW**
    - requestAnimationFrame: Smooth 60fps animations
    - Intersection Observer: Lazy loading and visibility tracking
    - Resize Observer: Responsive components
@@ -76,11 +76,11 @@ Start with these guides in order:
 cd examples
 
 # Vanilla JavaScript Example
-cd vanilla-example
+cd examples/crp/vanilla
 # Open index.html in your browser
 
 # React Example
-cd react-example
+cd examples/crp/react
 # Open index.html in your browser
 ```
 
@@ -224,46 +224,46 @@ Working applications demonstrating:
 - Performance comparison tools
 - Interactive demos
 
-### `javaScript/` Folder ⭐ **NEW**
-
-Comprehensive interview questions for senior developers:
-- **[Frontend Advanced Questions](./javaScript/frontend-advanced-questions.md)** - Virtual DOM, Event Loop, Memory Management, Service Workers, Promises, Browser Rendering, State Management, Performance, Security
-- **[Backend Advanced Questions](./javaScript/backend-advanced-questions.md)** - Event Loop, Streams & Buffers, Cluster & Workers, Memory Management, Connection Pooling, Microservices, Authentication, Rate Limiting, Error Handling, Testing & Mocking
-- **[TypeScript Advanced Questions](./javaScript/typescript-advanced-questions.md)** ⭐ **NEW** - Type System, Generics, Conditional Types, Mapped Types, Template Literals, Type Guards, Utility Types, Declaration Files, Design Patterns
-- **[React Advanced Questions](./javaScript/react-advanced-questions.md)** ⭐ **NEW** - Component Patterns, Hooks Deep Dive, State Management, Performance, Concurrent React, Server Components, Testing, Custom Hooks, Error Handling
-- **[DSA Interview Questions](./javaScript/dsa-interview-questions.md)** ⭐ **NEW** - Arrays, Hash Tables, Linked Lists, Trees, Graphs, Dynamic Programming, Sorting, Sliding Window, Common Patterns
-
-### `system-design/` Folder ⭐ **NEW**
-
-Comprehensive system design interviews:
-- **[Frontend System Design](./system-design/frontend-system-design.md)** - Chat apps, News feeds, Video streaming, Image galleries, Collaborative editors, E-commerce, Autocomplete, Notifications, Dashboards, Component libraries
-- **[Backend System Design](./system-design/backend-system-design.md)** - URL shortener, Rate limiter, Distributed cache, Message queues, API Gateway, Auth systems, Order systems, Leaderboards, Search engines, Payment systems
-- **[System Design Concepts](./system-design/system-design-concepts.md)** ⭐ **NEW** - Scalability, Load Balancing, Caching, Databases, Message Queues, Microservices, API Design, Security, Monitoring, CAP Theorem
-- **[Database Design Questions](./system-design/database-design-questions.md)** ⭐ **NEW** - Schema Design, E-Commerce, Social Media, Booking Systems, Indexing, Query Optimization, Data Modeling Patterns
-- **Complete with**: Architecture diagrams, Capacity estimation, API design, Database schemas, Code examples, Trade-off analysis
-
 ### `interview-prep/` Folder ⭐ **NEW**
 
-Complete interview preparation resources:
-- **[Behavioral Questions](./interview-prep/behavioral-questions.md)** - STAR Method, Leadership, Technical Decisions, Conflict Resolution, Communication, Questions to Ask
-- **[Coding Patterns Cheatsheet](./interview-prep/coding-patterns-cheatsheet.md)** - Two Pointers, Sliding Window, Binary Search, BFS/DFS, Backtracking, DP, Heaps, Union Find, Tries
+Complete interview preparation resources organized by category:
 
-### `design-pattren/` Folder ⭐ **NEW**
+**Coding Interview Prep:**
+- **[DSA Questions](./interview-prep/coding/dsa/dsa-interview-questions.md)** - Arrays, Hash Tables, Linked Lists, Trees, Graphs, Dynamic Programming, Sorting, Sliding Window, Common Patterns
+- **[Coding Patterns Cheatsheet](./interview-prep/coding/patterns/patterns-cheatsheet.md)** - Two Pointers, Sliding Window, Binary Search, BFS/DFS, Backtracking, DP, Heaps, Union Find, Tries
+- **[Frontend Advanced Questions](./interview-prep/coding/questions/frontend-advanced-questions.md)** - Virtual DOM, Event Loop, Memory Management, Service Workers, Promises, Browser Rendering, State Management, Performance, Security
+- **[Backend Advanced Questions](./interview-prep/coding/questions/backend-advanced-questions.md)** - Event Loop, Streams & Buffers, Cluster & Workers, Memory Management, Connection Pooling, Microservices, Authentication, Rate Limiting, Error Handling, Testing & Mocking
+- **[TypeScript Advanced Questions](./interview-prep/coding/questions/typescript-advanced-questions.md)** - Type System, Generics, Conditional Types, Mapped Types, Template Literals, Type Guards, Utility Types, Declaration Files, Design Patterns
+- **[React Advanced Questions](./interview-prep/coding/questions/react-advanced-questions.md)** - Component Patterns, Hooks Deep Dive, State Management, Performance, Concurrent React, Server Components, Testing, Custom Hooks, Error Handling
+
+**System Design:**
+- **[System Design Concepts](./interview-prep/system-design/system-design-concepts.md)** - Scalability, Load Balancing, Caching, Databases, Message Queues, Microservices, API Design, Security, Monitoring, CAP Theorem
+- **[Frontend System Design](./interview-prep/system-design/frontend-system-design.md)** - Chat apps, News feeds, Video streaming, Image galleries, Collaborative editors, E-commerce, Autocomplete, Notifications, Dashboards, Component libraries
+- **[Backend System Design](./interview-prep/system-design/backend-system-design.md)** - URL shortener, Rate limiter, Distributed cache, Message queues, API Gateway, Auth systems, Order systems, Leaderboards, Search engines, Payment systems
+- **[Database Design Questions](./interview-prep/system-design/database-design-questions.md)** - Schema Design, E-Commerce, Social Media, Booking Systems, Indexing, Query Optimization, Data Modeling Patterns
+
+**Behavioral Interview:**
+- **[Behavioral Questions](./interview-prep/behavioral/behavioral-questions.md)** - STAR Method, Leadership, Technical Decisions, Conflict Resolution, Communication, Questions to Ask
+
+**12-Week Learning Plan:**
+- **[12-Week Plan](./interview-prep/12-week-plan/README.md)** - Structured interview preparation plan with weekly breakdowns, progress tracking, and daily schedules
+
+### `design-patterns/` Folder ⭐ **NEW**
 
 Comprehensive design patterns with practical examples:
 
 **JavaScript Patterns:**
-- **[Creational Patterns](./design-pattren/javascript/01-creational-patterns.md)** - Factory, Abstract Factory, Singleton, Builder, Prototype with real-world examples
-- **[Structural Patterns](./design-pattren/javascript/02-structural-patterns.md)** - Adapter, Decorator, Facade, Proxy, Composite with practical implementations
-- **[Behavioral Patterns](./design-pattren/javascript/03-behavioral-patterns.md)** - Observer, Strategy, Command, State, Chain of Responsibility
-- **[Functional Patterns](./design-pattren/javascript/04-functional-patterns.md)** - Composition, Currying, Memoization, Higher-Order Functions, Monads, Immutability
+- **[Creational Patterns](./design-patterns/javascript/01-creational.md)** - Factory, Abstract Factory, Singleton, Builder, Prototype with real-world examples
+- **[Structural Patterns](./design-patterns/javascript/02-structural.md)** - Adapter, Decorator, Facade, Proxy, Composite with practical implementations
+- **[Behavioral Patterns](./design-patterns/javascript/03-behavioral.md)** - Observer, Strategy, Command, State, Chain of Responsibility
+- **[Functional Patterns](./design-patterns/javascript/04-functional.md)** - Composition, Currying, Memoization, Higher-Order Functions, Monads, Immutability
 
 **Node.js Patterns:**
-- **[Module Patterns](./design-pattren/nodejs/01-module-patterns.md)** - CommonJS, ES Modules, Revealing Module, Dependency Injection, Plugin Architecture
-- **[Async Patterns](./design-pattren/nodejs/02-async-patterns.md)** - Callbacks, Promises, Async/Await, Concurrency Control, Error Handling
-- **[Middleware Patterns](./design-pattren/nodejs/03-middleware-patterns.md)** - Express Middleware, Koa Onion Model, Pipeline, Chain of Responsibility
-- **[Streaming Patterns](./design-pattren/nodejs/04-streaming-patterns.md)** - Transform Streams, Pipeline, Backpressure, Object Mode
-- **[Microservices Patterns](./design-pattren/nodejs/05-microservices-patterns.md)** - Circuit Breaker, Saga, CQRS, Event Sourcing, Service Discovery
+- **[Module Patterns](./design-patterns/nodejs/01-module-patterns.md)** - CommonJS, ES Modules, Revealing Module, Dependency Injection, Plugin Architecture
+- **[Async Patterns](./design-patterns/nodejs/02-async-patterns.md)** - Callbacks, Promises, Async/Await, Concurrency Control, Error Handling
+- **[Middleware Patterns](./design-patterns/nodejs/03-middleware-patterns.md)** - Express Middleware, Koa Onion Model, Pipeline, Chain of Responsibility
+- **[Streaming Patterns](./design-patterns/nodejs/04-streaming-patterns.md)** - Transform Streams, Pipeline, Backpressure, Object Mode
+- **[Microservices Patterns](./design-patterns/nodejs/05-microservices-patterns.md)** - Circuit Breaker, Saga, CQRS, Event Sourcing, Service Discovery
 
 ---
 
@@ -317,24 +317,24 @@ Comprehensive design patterns with practical examples:
 
 ### Beginner (Start Here)
 
-1. Read [01-critical-rendering-path-overview.md](./docs/01-critical-rendering-path-overview.md)
-2. Try the [vanilla example](./examples/vanilla-example/)
+1. Read [Critical Rendering Path Overview](./docs/crp/01-overview.md)
+2. Try the [vanilla example](./examples/crp/vanilla/)
 3. Open Chrome DevTools and observe the Network/Performance tabs
 
 ### Intermediate
 
-1. Read [02-blocking-vs-non-blocking.md](./docs/02-blocking-vs-non-blocking.md)
-2. Read [03-crp-steps-deep-dive.md](./docs/03-crp-steps-deep-dive.md)
-3. Read [06-devtools-crp-analysis.md](./docs/06-devtools-crp-analysis.md) ⭐ **Hands-on!**
+1. Read [Blocking vs Non-Blocking Resources](./docs/crp/02-blocking-vs-non-blocking.md)
+2. Read [CRP Steps Deep Dive](./docs/crp/03-steps-deep-dive.md)
+3. Read [DevTools CRP Analysis](./docs/crp/06-devtools-analysis.md) ⭐ **Hands-on!**
 4. Compare both examples side-by-side
 5. Run Lighthouse audits on both
 6. Use Coverage tab to find unused code
 
 ### Advanced
 
-1. Read [04-vanilla-vs-react-comparison.md](./docs/04-vanilla-vs-react-comparison.md)
-2. Read [05-optimization-strategies.md](./docs/05-optimization-strategies.md)
-3. Read [07-advanced-methods-for-senior-developers.md](./docs/07-advanced-methods-for-senior-developers.md) ⭐ **Essential!**
+1. Read [Vanilla vs React Comparison](./docs/crp/04-vanilla-vs-react.md)
+2. Read [Optimization Strategies](./docs/crp/05-optimization.md)
+3. Read [Advanced Methods for Senior Developers](./docs/crp/07-advanced-methods.md) ⭐ **Essential!**
 4. Implement optimizations on your own projects
 5. Set up performance monitoring with Performance Observer
 6. Use Web Workers for heavy computations
@@ -344,38 +344,38 @@ Comprehensive design patterns with practical examples:
 ### Senior Developer Interview Prep ⭐ **COMPLETE GUIDE**
 
 1. **JavaScript Mastery**:
-   - Review [Frontend Advanced Questions](./javaScript/frontend-advanced-questions.md)
-   - Practice [Backend Advanced Questions](./javaScript/backend-advanced-questions.md)
-   - Master [TypeScript Advanced Questions](./javaScript/typescript-advanced-questions.md)
-   - Study [React Advanced Questions](./javaScript/react-advanced-questions.md)
+   - Review [Frontend Advanced Questions](./interview-prep/coding/questions/frontend-advanced-questions.md)
+   - Practice [Backend Advanced Questions](./interview-prep/coding/questions/backend-advanced-questions.md)
+   - Master [TypeScript Advanced Questions](./interview-prep/coding/questions/typescript-advanced-questions.md)
+   - Study [React Advanced Questions](./interview-prep/coding/questions/react-advanced-questions.md)
    - Implement all code examples from scratch
 
 2. **Data Structures & Algorithms**:
-   - Study [DSA Interview Questions](./javaScript/dsa-interview-questions.md)
-   - Use [Coding Patterns Cheatsheet](./interview-prep/coding-patterns-cheatsheet.md)
+   - Study [DSA Interview Questions](./interview-prep/coding/dsa/dsa-interview-questions.md)
+   - Use [Coding Patterns Cheatsheet](./interview-prep/coding/patterns/patterns-cheatsheet.md)
    - Practice pattern recognition
    - Solve 2-3 problems daily on LeetCode
 
 3. **System Design**:
-   - Study [System Design Concepts](./system-design/system-design-concepts.md) first
-   - Review [Database Design Questions](./system-design/database-design-questions.md)
-   - Practice [Frontend System Design](./system-design/frontend-system-design.md)
-   - Practice [Backend System Design](./system-design/backend-system-design.md)
+   - Study [System Design Concepts](./interview-prep/system-design/system-design-concepts.md) first
+   - Review [Database Design Questions](./interview-prep/system-design/database-design-questions.md)
+   - Practice [Frontend System Design](./interview-prep/system-design/frontend-system-design.md)
+   - Practice [Backend System Design](./interview-prep/system-design/backend-system-design.md)
    - Draw architecture diagrams
    - Do capacity estimation exercises
 
 4. **Behavioral Interview**:
-   - Review [Behavioral Questions](./interview-prep/behavioral-questions.md)
+   - Review [Behavioral Questions](./interview-prep/behavioral/behavioral-questions.md)
    - Prepare 7-10 STAR stories
    - Practice out loud
    - Prepare questions for interviewers
 
 5. **Design Patterns Mastery** ⭐ **NEW**:
-   - Study [JavaScript Creational Patterns](./design-pattren/javascript/01-creational-patterns.md)
-   - Learn [Structural Patterns](./design-pattren/javascript/02-structural-patterns.md)
-   - Master [Behavioral Patterns](./design-pattren/javascript/03-behavioral-patterns.md)
-   - Practice [Node.js Async Patterns](./design-pattren/nodejs/02-async-patterns.md)
-   - Implement [Microservices Patterns](./design-pattren/nodejs/05-microservices-patterns.md)
+   - Study [JavaScript Creational Patterns](./design-patterns/javascript/01-creational.md)
+   - Learn [Structural Patterns](./design-patterns/javascript/02-structural.md)
+   - Master [Behavioral Patterns](./design-patterns/javascript/03-behavioral.md)
+   - Practice [Node.js Async Patterns](./design-patterns/nodejs/02-async-patterns.md)
+   - Implement [Microservices Patterns](./design-patterns/nodejs/05-microservices-patterns.md)
 
 6. **Interview Practice**:
    - Mock interviews with peers
@@ -470,7 +470,7 @@ CLS (Cumulative Layout Shift)
 - **Performance Tab**: Record and analyze page load
 - **Lighthouse**: Comprehensive audits
 - **Coverage Tab**: Find unused CSS/JS
-- 📖 **See [DevTools Guide](./docs/06-devtools-crp-analysis.md) for detailed tutorial!**
+- 📖 **See [DevTools Guide](./docs/crp/06-devtools-analysis.md) for detailed tutorial!**
 
 ### Online Tools
 - [PageSpeed Insights](https://pagespeed.web.dev/)

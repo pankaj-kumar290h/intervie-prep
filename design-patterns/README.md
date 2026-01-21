@@ -7,13 +7,13 @@ This folder contains comprehensive design patterns for JavaScript and Node.js wi
 ## 📁 Folder Structure
 
 ```
-design-pattren/
+design-patterns/
 │
 ├── javascript/
-│   ├── 01-creational-patterns.md      # Factory, Singleton, Builder, Prototype
-│   ├── 02-structural-patterns.md      # Adapter, Decorator, Facade, Proxy
-│   ├── 03-behavioral-patterns.md      # Observer, Strategy, Command, State
-│   └── 04-functional-patterns.md      # Composition, Currying, Memoization
+│   ├── 01-creational.md      # Factory, Singleton, Builder, Prototype
+│   ├── 02-structural.md      # Adapter, Decorator, Facade, Proxy
+│   ├── 03-behavioral.md      # Observer, Strategy, Command, State
+│   └── 04-functional.md      # Composition, Currying, Memoization
 │
 ├── nodejs/
 │   ├── 01-module-patterns.md          # CommonJS, ES Modules, Revealing Module

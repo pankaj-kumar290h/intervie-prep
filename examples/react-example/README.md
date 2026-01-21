@@ -448,8 +448,8 @@ npx create-next-app@latest
 
 ## Learn More
 
-- [Vanilla vs React Comparison](../../docs/04-vanilla-vs-react-comparison.md)
-- [Optimization Strategies](../../docs/05-optimization-strategies.md)
+- [Vanilla vs React Comparison](../../docs/crp/04-vanilla-vs-react.md)
+- [Optimization Strategies](../../docs/crp/05-optimization.md)
 - [React Official Docs](https://react.dev)
 - [Next.js Documentation](https://nextjs.org/docs)
 

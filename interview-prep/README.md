@@ -1,109 +1,139 @@
 # Interview Preparation Guide
 
-## Overview
+Complete interview preparation resources for JavaScript/Full-Stack developers.
 
-This folder contains comprehensive resources for preparing for senior developer interviews, covering both technical and behavioral aspects.
-
-## Contents
-
-### 1. [Behavioral Questions](./behavioral-questions.md)
-- STAR Method Framework
-- Leadership & Mentorship scenarios
-- Technical Decision Making
-- Conflict Resolution
-- Project Management
-- Communication skills
-- Problem Solving examples
-- Growth & Learning
-- Culture Fit questions
-- Questions to Ask Interviewers
-
-### 2. [Coding Patterns Cheatsheet](./coding-patterns-cheatsheet.md)
-- Two Pointers
-- Sliding Window
-- Fast & Slow Pointers
-- Merge Intervals
-- Binary Search
-- BFS & DFS
-- Backtracking
-- Dynamic Programming
-- Monotonic Stack
-- Heap / Priority Queue
-- Union Find
-- Trie
-
-## Interview Timeline
+## 📁 Structure
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                 INTERVIEW PREPARATION TIMELINE               │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  4 WEEKS BEFORE:                                            │
-│  □ Review all coding patterns                               │
-│  □ Practice 2-3 problems daily                              │
-│  □ Prepare STAR stories for behavioral                      │
-│  □ Research target companies                                │
-│                                                              │
-│  2 WEEKS BEFORE:                                            │
-│  □ Mock interviews (coding + behavioral)                    │
-│  □ Review system design concepts                            │
-│  □ Practice explaining technical decisions                  │
-│  □ Refine resume and portfolio                              │
-│                                                              │
-│  1 WEEK BEFORE:                                             │
-│  □ Light practice (don't burn out)                          │
-│  □ Review company-specific info                             │
-│  □ Prepare questions for interviewers                       │
-│  □ Plan logistics (test setup for remote)                   │
-│                                                              │
-│  DAY BEFORE:                                                │
-│  □ Relax and get good sleep                                 │
-│  □ Prepare outfit/environment                               │
-│  □ Review your prepared stories                             │
-│  □ Light review of key patterns                             │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+interview-prep/
+├── coding/                    # Coding interview preparation
+│   ├── dsa/                  # Data Structures & Algorithms
+│   ├── patterns/             # Coding patterns & templates
+│   └── questions/            # Advanced interview questions
+│
+├── system-design/            # System design interviews
+│   ├── concepts.md           # Core concepts
+│   ├── frontend-designs.md   # Frontend system designs
+│   ├── backend-designs.md    # Backend system designs
+│   └── database-design.md    # Database design questions
+│
+├── behavioral/               # Behavioral interviews
+│   └── behavioral-questions.md
+│
+└── 12-week-plan/            # Structured learning plan
+    ├── README.md
+    ├── progress-tracker.md
+    ├── daily-schedule.md
+    └── weeks/               # Weekly breakdowns
 ```
 
-## Practice Resources
+---
 
-### Coding Practice
-- LeetCode (focus on Medium difficulty)
-- HackerRank
-- CodeSignal
-- Pramp (for mock interviews)
+## 🚀 Quick Start
 
-### System Design Practice
-- Educative.io - Grokking System Design
-- System Design Primer (GitHub)
-- High Scalability Blog
+### For Coding Interviews
+1. Start with [DSA Questions](./coding/dsa/dsa-interview-questions.md)
+2. Study [Coding Patterns](./coding/patterns/patterns-cheatsheet.md)
+3. Practice [Advanced Questions](./coding/questions/)
 
-### Behavioral Practice
-- Record yourself answering questions
-- Practice with a friend
-- Use mirror technique for body language
+### For System Design
+1. Read [System Design Concepts](./system-design/system-design-concepts.md)
+2. Practice [Frontend Designs](./system-design/frontend-system-design.md)
+3. Practice [Backend Designs](./system-design/backend-system-design.md)
 
-## Success Tips
+### For Structured Learning
+1. Follow the [12-Week Plan](./12-week-plan/README.md)
+2. Track progress with [Progress Tracker](./12-week-plan/progress-tracker.md)
+3. Use [Daily Schedule](./12-week-plan/daily-schedule.md)
 
-1. **Communicate Clearly**
-   - Think out loud during coding
-   - Explain your reasoning
-   - Ask clarifying questions
+---
 
-2. **Manage Time**
-   - Don't spend too long on one approach
-   - Know when to ask for hints
-   - Leave time for questions
+## 📚 Resources by Category
 
-3. **Stay Calm**
-   - It's okay to pause and think
-   - Interviewers want you to succeed
-   - Mistakes are learning opportunities
+### Coding Interview Prep
 
-4. **Be Authentic**
-   - Don't memorize answers verbatim
-   - Share genuine experiences
-   - Show enthusiasm for the role
+#### Data Structures & Algorithms
+- [DSA Interview Questions](./coding/dsa/dsa-interview-questions.md)
+  - Arrays & Hash Tables
+  - Linked Lists, Stacks, Queues
+  - Trees & Graphs
+  - Dynamic Programming
+  - Sorting & Searching
+  - Sliding Window & Two Pointers
 
-Good luck, मालिक! 🚀
+#### Coding Patterns
+- [Patterns Cheatsheet](./coding/patterns/patterns-cheatsheet.md)
+  - Two Pointers
+  - Sliding Window
+  - Binary Search
+  - BFS/DFS
+  - Backtracking
+  - Dynamic Programming
+  - Heaps, Tries
+
+#### Advanced Questions
+- [Frontend Advanced](./coding/questions/frontend-advanced-questions.md)
+- [Backend Advanced](./coding/questions/backend-advanced-questions.md)
+- [React Advanced](./coding/questions/react-advanced-questions.md)
+- [TypeScript Advanced](./coding/questions/typescript-advanced-questions.md)
+
+### System Design
+
+- [System Design Concepts](./system-design/system-design-concepts.md)
+- [Frontend System Design](./system-design/frontend-system-design.md)
+- [Backend System Design](./system-design/backend-system-design.md)
+- [Database Design](./system-design/database-design-questions.md)
+
+### Behavioral Interview
+
+- [Behavioral Questions](./behavioral/behavioral-questions.md)
+  - STAR Method
+  - Leadership examples
+  - Technical decisions
+  - Conflict resolution
+
+### 12-Week Learning Plan
+
+- [Overview](./12-week-plan/README.md)
+- [Week-by-Week Plans](./12-week-plan/weeks/)
+- [Progress Tracker](./12-week-plan/progress-tracker.md)
+- [Daily Schedule](./12-week-plan/daily-schedule.md)
+
+---
+
+## 🎯 Learning Paths
+
+### Path 1: Quick Prep (4-6 weeks)
+1. [Coding Patterns](./coding/patterns/patterns-cheatsheet.md) - 1 week
+2. [DSA Questions](./coding/dsa/dsa-interview-questions.md) - 2-3 weeks
+3. [System Design Basics](./system-design/system-design-concepts.md) - 1 week
+4. [Behavioral Prep](./behavioral/behavioral-questions.md) - 1 week
+
+### Path 2: Comprehensive (12 weeks)
+Follow the [12-Week Plan](./12-week-plan/README.md) for structured learning.
+
+### Path 3: Focused Areas
+- **Frontend Focus:** [Frontend Advanced](./coding/questions/frontend-advanced-questions.md) + [React Advanced](./coding/questions/react-advanced-questions.md)
+- **Backend Focus:** [Backend Advanced](./coding/questions/backend-advanced-questions.md) + [Backend System Design](./system-design/backend-system-design.md)
+- **Full-Stack:** Complete [12-Week Plan](./12-week-plan/README.md)
+
+---
+
+## 💡 Tips
+
+1. **Practice Daily:** Consistency beats intensity
+2. **Explain Out Loud:** Communication is 50% of interviews
+3. **Time Yourself:** Medium problems in 30-40 minutes
+4. **Review Solutions:** Learn optimal approaches
+5. **Mock Interviews:** Practice with peers or platforms
+
+---
+
+## 🔗 Related Resources
+
+- [Design Patterns](../../design-patterns/) - JavaScript & Node.js patterns
+- [CRP Documentation](../../docs/crp/) - Critical Rendering Path guides
+
+---
+
+**Good luck with your interviews!** 🚀

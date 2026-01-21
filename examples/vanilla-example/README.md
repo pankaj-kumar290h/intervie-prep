@@ -222,7 +222,7 @@ See the React example in `../react-example/` and the comparison doc in `../../do
 
 ## Learn More
 
-- [Critical Rendering Path Overview](../../docs/01-critical-rendering-path-overview.md)
-- [Blocking vs Non-Blocking](../../docs/02-blocking-vs-non-blocking.md)
-- [Optimization Strategies](../../docs/05-optimization-strategies.md)
+- [Critical Rendering Path Overview](../../docs/crp/01-overview.md)
+- [Blocking vs Non-Blocking](../../docs/crp/02-blocking-vs-non-blocking.md)
+- [Optimization Strategies](../../docs/crp/05-optimization.md)
 
