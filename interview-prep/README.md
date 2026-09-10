@@ -18,7 +18,12 @@ This folder contains comprehensive resources for preparing for senior developer 
 - Culture Fit questions
 - Questions to Ask Interviewers
 
-### 2. [Coding Patterns Cheatsheet](./coding-patterns-cheatsheet.md)
+### 2. [Study Plan — FE → Product Company](./study-plan.md)
+- 12-week phased plan (DSA, JS deep-dive, machine coding, system design, behavioral)
+- Tailored for a frontend dev (4 yrs + some backend) targeting product-based companies
+- Weekly checklist template and realistic milestones
+
+### 3. [Coding Patterns Cheatsheet](./coding-patterns-cheatsheet.md)
 - Two Pointers
 - Sliding Window
 - Fast & Slow Pointers
